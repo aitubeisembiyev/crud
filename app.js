@@ -45,6 +45,10 @@ app.get('/find', (req, res) => {
     findOne(req,res)
 });*/
 
+app.get('/update', (req, res) => {
+    res.render('update');
+});
+
 app.get('/delete', (req, res) => {
     res.render('delete');
 });

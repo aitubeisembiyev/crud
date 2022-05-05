@@ -59,26 +59,33 @@ exports.findOne = async (req, res) => {
 };
 // Update a user by the id in the request
 exports.update = async (req, res) => {
-    if(!req.body) {
-        res.status(400).send({
-            message: "Data to update can not be empty!"
-        });
+
+    if (!req.body.newEmail || !req.body.newFirstName || !req.body.newLastName || !req.body.newPhone) {
+        //res.status(400).send({ message: "Content can not be empty!" });
+        res.status(400).render('results', {mydata: "Data to update can not be empty!"})
+        return
     }
 
-    const id = req.params.id;
+    //const email = req.params.email;
+    const query = req.body.oldEmail;
 
-    await UserModel.findByIdAndUpdate(id, req.body, { useFindAndModify: false }).then(data => {
+    //await UserModel.findByIdAndUpdate(id, req.body, { useFindAndModify: false }).then(data => {
+    await UserModel.findOneAndUpdate({email: query}, {email:req.body.newEmail,
+        firstName:req.body.newFirstName,
+        lastName:req.body.newLastName,
+        phone:req.body.newPhone
+    }).then(data => {
+        console.log(data)
         if (!data) {
-            res.status(404).send({
-                message: `User not found.`
-            });
+            //res.status(404).send({message: `User not found.`});
+            res.status(404).render('results', {mydata: `User not found.`})
         }else{
-            res.send({ message: "User updated successfully." })
+            //res.send({ message: "User updated successfully." })
+            res.render('results', {mydata: "User updated successfully."})
         }
     }).catch(err => {
-        res.status(500).send({
-            message: err.message
-        });
+        //res.status(500).send({message: err.message});
+        res.status(500).render('results', {mydata: err.message})
     });
 };
 // Delete a user with the specified id in the request
