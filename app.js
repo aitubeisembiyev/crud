@@ -1,12 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const ejs=require('ejs')
+const methodOverride = require('method-override')
 const app = express();
 //const port = 3000
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
+
+app.use(methodOverride('_method'))
 
 const UserRoute = require('./routes/UserRoute')
 app.use('/user',UserRoute)
