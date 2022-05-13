@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
             message:"User created successfully!!",
             user:data
         });*/
-        res.render('results', {mydata: "user "+ data.firstName +" created succesfully!"})
+        res.status(200).render('results', {mydata: "user "+ data.firstName +" created succesfully!"})
     }).catch(err => {
         /*res.status(500).send({
             message: err.message || "Some error occurred while creating user"
@@ -44,7 +44,7 @@ exports.findOne = async (req, res) => {
         //const user = await UserModel.findById(req.query.id); //change params to query
         //res.status(200).json(user);
         if (user===null){
-            res.status(200).render('results', {mydata: "user not found"
+            res.status(404).render('results', {mydata: "user not found"
             })
         }else{
             res.status(200).render('results', {mydata: "user :"+ user.firstName +" "
@@ -81,7 +81,7 @@ exports.update = async (req, res) => {
             res.status(404).render('results', {mydata: `User not found.`})
         }else{
             //res.send({ message: "User updated successfully." })
-            res.render('results', {mydata: "User updated successfully."})
+            res.status(200).render('results', {mydata: "User updated successfully."})
         }
     }).catch(err => {
         //res.status(500).send({message: err.message});
@@ -90,9 +90,10 @@ exports.update = async (req, res) => {
 };
 // Delete a user with the specified id in the request
 exports.destroy = async (req, res) => {
+
     //await UserModel.findByIdAndRemove(req.params.id).then(data => {
     let useremail=req.body.email
-    await UserModel.deleteOne({email: req.body.email}).then(data => {
+    await UserModel.deleteOne({email: useremail}).then(data => {
     //await UserModel.findByIdAndRemove(req.query.id).then(data => {
         //console.log(data)
         if (data.deletedCount===0) {
@@ -102,7 +103,7 @@ exports.destroy = async (req, res) => {
         } else {
             //res.send({message: "User deleted successfully!"});
 
-            res.render('results', {mydata: "user "+useremail+" deleted succesfully!"})
+            res.status(200).render('results', {mydata: "user "+useremail+" deleted succesfully!"})
         }
     }).catch(err => {
         //res.status(500).send({ message: err.message });

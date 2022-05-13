@@ -2,8 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs=require('ejs')
 const methodOverride = require('method-override')
+const swaggerUi = require('swagger-ui-express')
+swaggerDocument = require('./swagger.json');
 const app = express();
 //const port = 3000
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
@@ -57,10 +60,10 @@ app.get('/delete', (req, res) => {
 });
 
 
-let port = process.env.PORT;
-if (port == null || port == "") {
+let port = process.env.PORT||3000;
+/*if (port == null || port == "") {
     port = 3000;
-}
+}*/
 
 app.listen(port, () => {
     console.log(`Server is listening on port http://localhost:${port}`);
